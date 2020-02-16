@@ -1,0 +1,188 @@
+dbda(date, days)
+-This functions takes 2 arguments:
+date
+days
+-The first part of the function is used to determine
+if the given will be added or subtracted from the date. 
+In addition, the function checks if the days given
+are bigger than the date and vice versa
+if len(days) == 10:
+		valid_date(days)
+
+		day_counter = 0
+		temp_day = days
+
+		if date > days:
+
+			while date > temp_day:
+				temp_day = after(temp_day)
+				day_counter = day_counter + 1
+			
+		elif temp_day > date:
+			while date != temp_day:
+				temp_day = before(temp_day)
+				day_counter = day_counter + 1
+
+		print(day_counter)
+-Next, the date argument is separated using the split function. 
+The days argument is placed in a counter variable to be calculated
+else:
+		valid_date(date)
+		
+		str_year, str_month, str_day = date.split('-')
+		year = int(str_year)
+		month = int(str_month)
+		day = int(str_day)
+
+		counter = int(days)
+		new_date = date
+-Checking if the days given will be added or subtracted
+		if counter > 0:
+			while counter != 0:
+				if sys.argv[1] == '--step':
+					new_date = after(new_date)
+					counter = counter - 1
+					print(new_date)
+				else:
+					new_date = after(new_date)
+					counter = counter - 1
+		elif counter < 0:
+			while counter != 0:
+				if sys.argv[1] == '--step':
+					new_date = before(new_date)
+					counter = counter + 1
+					print(new_date)
+				else:
+					new_date = before(new_date)
+					counter = counter + 1 
+
+
+after(date)
+-This functions take 1 argument and returns the next date:
+date in "YYYY-MM-DD" format
+-Using the split function, the data is separated and uses (-) to distinguish where
+it is being separated.
+str_year, str_month, str_day = date.split('-')
+-All separated data is stored into a new object and converted into int format.
+year = int(str_year)
+month = int(str_month)
+day = int(str_day)
+-The next date is then calculated and stored into temporary objects.
+temp_day = day + 1
+temp_month = month
+-The day_in_mon() function is called to retrieve the days/month dictionary
+assign the month to the given one and check how many days are in the month.
+mon_max = days_in_mon(year)
+-The days are then checked to see if they go over the days/month and will
+reset to the 1st day of the next month if true
+if temp_day > mon_max[month]:
+		temp_day = 1
+		temp_month = month + 1
+-The months are then checked to see if they go over the months/per year
+and will reset to the 1st day of the next year if true
+if temp_month > 12:
+		temp_day = 1
+		temp_month = 1
+		year = year + 1
+-Finally, the all the results are converted into a string, separated, and stored
+into an object called tomorrow and is returned to show the next date.
+tomorrow = str(year) + "-" + str(temp_month).zfill(2) + "-" + str(temp_day).zfill(2)
+return tomorrow
+
+before(date)
+-This functions take 1 argument and returns the previous date:
+date in "YYYY-MM-DD" format
+-Using the split function, the data is separated and uses (-) to distinguish where
+it is being separated.
+str_year, str_month, str_day = date.split('-')
+-All separated data is stored into a new object and converted into int format.
+year = int(str_year)
+month = int(str_month)
+day = int(str_day)
+-The previous date is then calculated and stored into temporary objects.
+temp_day = day - 1
+temp_month = month
+-The day_in_mon() function is called to retrieve the days/month dictionary
+assign the month to the given one and check how many days are in the month.
+mon_max = days_in_mon(year)
+-The days are then checked to see if they go below the days/month and will
+reset to the last day of the last month if true
+if temp_day == 0:
+		temp_day = mon_max[month] -2
+		temp_month = month - 1
+-The months are then checked to see if they go below the months/per year
+and will reset to the last day of the ast year if true
+if temp_month == 0:
+		temp_day = 31
+		temp_month = 12
+		year = year - 1
+-Finally, the all the results are converted into a string, separated, and stored
+into an object called yesterday and is returned to show the previous date.
+yesterday = str(year) + "-" + str(temp_month).zfill(2) + "-" + str(temp_day).zfill(2)
+return tomorrow
+
+valid_date(date)
+-This function takes 1 argument and checks if the given date is valid:
+date in "YYYY-MM-DD" format
+-The given date is checked first for the correct format. The script outputs an
+error message and exits the program:
+if len(str(date)) != 10:
+		print('Error: wrong date entered')
+		exit()
+-If valid, the data is separated with the split function and uses (-) to distinguish where
+it is being separated.
+str_year, str_month, str_day = date.split('-')
+	year = int(str_year)
+	month = int(str_month) 
+	day = int(str_day)
+-The month is then checked to see if it's in the days/month dictionary. The scripts gives out
+an error and exits when the month is not in the dictionary.
+days_per_month = days_in_mon(year)
+	if month not in days_per_month.keys():
+		print('Error: wrong month entered')
+		exit()
+-The days are then checked to see if the right amount of days given 
+is correct. Using the days/month dictionary, the days are then
+determined if they are within the range of the month (1-28, 1-29, 1-30, 1-31)
+month_days_dictionary = days_in_mon(year)
+month_days = month_days_dictionary[month]
+-If false, an error message is show, and the script exits.
+	if day not in range(1, month_days + 1):
+		print('Error: wrong day entered')
+		exit()
+
+leap_year(year)
+-This functions takes 1 argument and checks if it is a leap year.
+year in "YYYY" format
+-Using the modulo(%), the given year is calculated to see if it's
+divisible by 4
+if (year % 4 == 0):
+-A leap year must also be evenly divisible 100 and 400.
+It will check first if divisible by 400, then 100. The function then
+will return true or false using the built-in function is_leapyear.
+is_leapyear.
+		if (year % 100 == 0):
+			if (year % 400 ==0):
+				is_leapyear = True
+			else:
+				is_leapyear = False
+		else:
+			is_leapyear = True
+	else:
+		is_leapyear = False
+    		
+	return is_leapyear
+
+days_in_mon(year)
+-This function takes in 1 argument and returns the corresponding month:
+year in "YYYY" format
+-The given year is then pass through the leapyear() function to determine
+if it's a leap year and how many days are in the month of February
+if leap_year(year) == True:
+		feb = 29
+	else:
+		feb = 28
+-The function then returns the number of days of the given month from the
+day/month dictionary
+days_per_month = {1:31, 2:feb, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
+	return days_per_month
